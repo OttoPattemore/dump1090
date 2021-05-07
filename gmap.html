@@ -131,6 +131,21 @@
                 if (Planes[plane.hex]) {
                     var myplane = Planes[plane.hex];
                     marker = myplane.marker;
+                    popup_text = "No callsign"
+                    if(plane.flight != ""){
+                      popup_text = plane.flight;
+                    }
+                    popup_text += "<br>"
+                    popup_text += "Last seen: ";
+                    popup_text += plane.seen;
+                    popup_text += "s ago";
+                    marker.bindPopup(popup_text);
+                    marker.on('mouseover', function (e) {
+                        this.openPopup();
+                    });
+                    marker.on('mouseout', function (e) {
+                      this.closePopup();
+                    });
                     marker.setLatLng([plane.lat,plane.lon]);
                     marker.setIcon(getIconForPlane(plane));
                     myplane.altitude = plane.altitude;
@@ -144,7 +159,7 @@
                         refreshSelectedInfo();
                 } else {
                     var icon = getIconForPlane(plane);
-                    var marker = L.marker([plane.lat, plane.lon], {icon: icon}).addTo(Map);
+                    var marker = L.marker([plane.lat, plane.lon],{icon: icon}).addTo(Map).bindPopup("I am a green leaf.");
                     var hex = plane.hex;
                     marker.on('click',selectPlaneCallback(plane.hex));
                     plane.marker = marker;
